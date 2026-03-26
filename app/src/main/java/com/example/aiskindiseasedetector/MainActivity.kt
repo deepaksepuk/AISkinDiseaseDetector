@@ -126,7 +126,7 @@ fun SplashScreen() {
             Image(
                 modifier = Modifier.size(200.dp, 200.dp),
                 painter = painterResource(id = R.drawable.icon),
-                contentDescription = "Grocery Store Manager",
+                contentDescription = "",
             )
 
 
