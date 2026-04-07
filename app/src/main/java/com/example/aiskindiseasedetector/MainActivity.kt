@@ -91,7 +91,8 @@ fun SplashScreen() {
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(color = colorResource(id = R.color.p4)),
     ) {
 
         Column(
@@ -108,8 +109,9 @@ fun SplashScreen() {
             Text(
                 text = "AI Skin Disease Detector App!",
                 textAlign = TextAlign.Center,
-                color = colorResource(id = R.color.black),
-                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                color = colorResource(id = R.color.p3),
+//                color = colorResource(id = R.color.black),
+                style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
 
@@ -135,12 +137,7 @@ fun SplashScreen() {
 
         }
 
-        Image(
-            painter = painterResource(id = R.drawable.wt_wave_down), // Replace with your actual SVG drawable
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier.fillMaxWidth()
-        )
+
 
         Text(
             text = "By",
@@ -153,7 +150,7 @@ fun SplashScreen() {
         )
 
         Text(
-            text = "Dummy dummy",
+            text = "Deepak",
             color = colorResource(id = R.color.black),
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier
