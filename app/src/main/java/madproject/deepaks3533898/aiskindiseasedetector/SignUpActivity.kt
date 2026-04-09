@@ -1,14 +1,5 @@
-package com.example.aiskindiseasedetector
+package madproject.deepaks3533898.aiskindiseasedetector
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,28 +21,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import kotlin.jvm.java
 
-class SignUpActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            RegistrationScreen()
-        }
-    }
-}
 
 @Composable
-fun RegistrationScreen() {
+fun SignUpScreen(onBackToLogin: () -> Unit) {
 
     var userName by remember { mutableStateOf("") }
 
@@ -257,14 +235,17 @@ fun RegistrationScreen() {
 //                            Toast.makeText(context, " Please Enter Name", Toast.LENGTH_SHORT)
 //                                .show()
                             }
+
                             userAge.isEmpty() -> {
 //                            Toast.makeText(context, " Please Enter Age", Toast.LENGTH_SHORT)
 //                                .show()
                             }
+
                             userWeight.isEmpty() -> {
 //                            Toast.makeText(context, " Please Enter Weight", Toast.LENGTH_SHORT)
 //                                .show()
                             }
+
                             userGender.isEmpty() -> {
 //                            Toast.makeText(context, " Please Enter Gender", Toast.LENGTH_SHORT)
 //                                .show()
@@ -360,16 +341,16 @@ fun RegistrationScreen() {
 //}
 
 data class PersonDetails(
-    var name : String = "",
-    var emailid : String = "",
-    var age : String = "",
-    var weight: String="",
-    var gender: String="",
+    var name: String = "",
+    var emailid: String = "",
+    var age: String = "",
+    var weight: String = "",
+    var gender: String = "",
     var password: String = ""
 )
 
 @Preview(showBackground = true)
 @Composable
 fun RegistrationScreenPreview() {
-    RegistrationScreen()
+//    RegistrationScreen()
 }

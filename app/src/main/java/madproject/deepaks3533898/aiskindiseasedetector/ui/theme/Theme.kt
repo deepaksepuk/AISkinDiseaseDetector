@@ -1,6 +1,5 @@
-package com.example.aiskindiseasedetector.ui.theme
+package madproject.deepaks3533898.aiskindiseasedetector.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -12,15 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.Purple80,
+    secondary = _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.PurpleGrey80,
+    tertiary = _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.Pink80
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.Purple40,
+    secondary = _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.PurpleGrey40,
+    tertiary = _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.Pink40
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -46,13 +45,13 @@ fun AISkinDiseaseDetectorTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.DarkColorScheme
+        else -> _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.LightColorScheme
     }
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = _root_ide_package_.madproject.example.aiskindiseasedetector.ui.theme.Typography,
         content = content
     )
 }

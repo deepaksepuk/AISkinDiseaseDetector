@@ -1,4 +1,4 @@
-package com.example.aiskindiseasedetector
+package madproject.deepaks3533898.aiskindiseasedetector
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

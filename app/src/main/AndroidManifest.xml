@@ -11,17 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AISkinDiseaseDetector">
+
         <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignInActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name="madproject.deepaks3533898.aiskindiseasedetector.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AISkinDiseaseDetector">

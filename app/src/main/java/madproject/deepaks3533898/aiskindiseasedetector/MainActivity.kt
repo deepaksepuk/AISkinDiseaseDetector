@@ -1,7 +1,5 @@
-package com.example.aiskindiseasedetector
+package madproject.deepaks3533898.aiskindiseasedetector
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,17 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -34,12 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.aiskindiseasedetector.ui.theme.AISkinDiseaseDetectorTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.jvm.java
+import madproject.deepaks3533898.aiskindiseasedetector.ui.theme.AISkinDiseaseDetectorTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,47 +38,104 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AISkinDiseaseDetectorTheme {
-                SkinDetectorStarter()
+                AppNavigationMain()
             }
         }
     }
 }
+
+
 @Composable
-fun SkinDetectorStarter() {
-    val context = LocalContext.current as Activity
-    var showSplash by remember { mutableStateOf(true) }
+fun AppNavigationMain() {
 
-    DisposableEffect(Unit) {
-        val job = CoroutineScope(Dispatchers.Main).launch {
-            delay(3000)
-            showSplash = false
+    val navController = rememberNavController()
+    val context = LocalContext.current
+
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Splash.route
+    ) {
+
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                onNavigate = {
+                    if (PatientData.getUserLoginStatus(context)) {
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.Splash.route) { inclusive = true }
+                        }
+                    } else {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Splash.route) { inclusive = true }
+                        }
+                    }
+                }
+            )
         }
-        onDispose { job.cancel() }
-    }
 
-    if (showSplash) {
-        SplashScreen()
+        composable(Screen.Login.route) {
+            SignInScreen(
+                onLoginSuccess = {
 
-    } else {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                },
+                onRegisterClick = {
+                    navController.navigate(Screen.Register.route)
+                }
+            )
+        }
 
-//        val currentStatus = WorkoutTrackerData.readLS(context)
-//
-//        if(currentStatus)
-//        {
-//            context.startActivity(Intent(context, WorkoutHomeActivity::class.java))
-//            context.finish()
-//        }else{
-//            context.startActivity(Intent(context, LoginActivity::class.java))
-//            context.finish()
+        composable(Screen.Register.route) {
+            SignUpScreen(
+                onBackToLogin = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(Screen.Home.route) {
+            HomeScreen(navController)
+        }
+
+//        composable(Screen.CropAdvisory.route) {
+//            CropAdvisoryScreen(onBack = {
+//                navController.popBackStack()
+//            })
 //        }
 
 
     }
+}
+
+sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
+    object Login : Screen("login")
+    object Register : Screen("register")
+    object Home : Screen("home")
+
+    object ScanDisease : Screen("scan_disease")
 
 }
 
+
 @Composable
-fun SplashScreen() {
+fun SplashScreen(onNavigate: () -> Unit) {
+
+    LaunchedEffect(Unit) {
+        delay(3000)
+        onNavigate()
+    }
+
+    SplashScreenDesign()
+
+
+}
+
+
+
+@Composable
+fun SplashScreenDesign() {
 
     Column(
         modifier = Modifier
@@ -167,5 +215,5 @@ fun SplashScreen() {
 @Preview(showBackground = true)
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen()
+//    SplashScreen()
 }

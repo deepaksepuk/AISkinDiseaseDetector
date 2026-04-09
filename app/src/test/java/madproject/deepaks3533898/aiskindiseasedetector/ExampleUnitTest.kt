@@ -1,4 +1,4 @@
-package com.example.aiskindiseasedetector
+package madproject.deepaks3533898.aiskindiseasedetector
 
 import org.junit.Test
 

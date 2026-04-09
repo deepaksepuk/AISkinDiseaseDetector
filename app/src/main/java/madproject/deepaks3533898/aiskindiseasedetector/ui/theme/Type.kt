@@ -1,4 +1,4 @@
-package com.example.aiskindiseasedetector.ui.theme
+package madproject.deepaks3533898.aiskindiseasedetector.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
