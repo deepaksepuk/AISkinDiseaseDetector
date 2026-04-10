@@ -145,6 +145,9 @@ fun SignInScreen(
                             }
 
                             else -> {
+
+
+                                onLoginSuccess.invoke()
 //                                val personDetails = PersonDetails(
 //                                    "",
 //                                    useremail,
@@ -186,6 +189,8 @@ fun SignInScreen(
                 color = colorResource(id = R.color.p3),
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
                 modifier = Modifier.clickable {
+                    onLoginSuccess.invoke()
+
 //                    context.startActivity(Intent(context, SignUpActivity::class.java))
 //                    context.finish()
                 }

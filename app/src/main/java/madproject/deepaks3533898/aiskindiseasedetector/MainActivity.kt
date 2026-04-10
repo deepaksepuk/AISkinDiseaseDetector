@@ -30,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
+import madproject.deepaks3533898.aiskindiseasedetector.scanSkin.ScanScreen
 import madproject.deepaks3533898.aiskindiseasedetector.ui.theme.AISkinDiseaseDetectorTheme
 
 class MainActivity : ComponentActivity() {
@@ -55,6 +56,12 @@ fun AppNavigationMain() {
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
+
+        composable(Screen.ScanDisease.route) {
+            ScanScreen(onAnalyzeClick = {
+
+            })
+        }
 
         composable(Screen.Splash.route) {
             SplashScreen(
@@ -97,6 +104,8 @@ fun AppNavigationMain() {
         composable(Screen.Home.route) {
             HomeScreen(navController)
         }
+
+
 
 //        composable(Screen.CropAdvisory.route) {
 //            CropAdvisoryScreen(onBack = {
