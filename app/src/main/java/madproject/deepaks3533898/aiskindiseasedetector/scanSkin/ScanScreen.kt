@@ -25,15 +25,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,10 +54,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.yalantis.ucrop.UCrop
+import madproject.deepaks3533898.aiskindiseasedetector.ui.theme.FirstBG
 import java.io.File
 
 fun createImageUri(context: Context): Uri? {
@@ -78,22 +88,33 @@ fun getCropIntent(context: Context, sourceUri: Uri): Intent {
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanScreen(
-    onAnalyzeClick: (Uri) -> Unit
+    onAnalyzeClick: () -> Unit,
+    viewModel: ScanViewModel ,
+    onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var tempUri by remember { mutableStateOf<Uri?>(null) }
 
+//    LaunchedEffect(viewModel.isAnalysisComplete) {
+//        if (viewModel.isAnalysisComplete) {
+//            onAnalyzeClick()
+//        }
+//    }
+
     // 🔥 Crop Launcher (FIXED)
     val cropLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val resultUri = UCrop.getOutput(result.data!!)
-            imageUri = resultUri
+            val resultUri = result.data?.let { UCrop.getOutput(it) }
+            if (resultUri != null) {
+                imageUri = resultUri
+            }
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             val error = UCrop.getError(result.data!!)
             error?.printStackTrace()
@@ -137,97 +158,118 @@ fun ScanScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F7FB))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Scan Skin", fontWeight = FontWeight.SemiBold) },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = FirstBG
+                )
+            )
+        }
+    ) { paddingValues ->
 
-        Text(
-            "Scan Skin",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // 🔹 Image Preview
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            elevation = CardDefaults.cardElevation(8.dp),
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(Color(0xFFF5F7FB))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+
+
+            // 🔹 Image Preview
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                elevation = CardDefaults.cardElevation(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
             ) {
-                if (imageUri == null) {
-                    Text("No image selected")
-                } else {
-                    AsyncImage(
-                        model = imageUri,
-                        contentDescription = "Selected Image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // 🔹 Buttons
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-
-            Button(onClick = {
-                if (ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.CAMERA
-                    ) == PackageManager.PERMISSION_GRANTED
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    val uri = createImageUri(context)
-                    tempUri = uri
-                    uri?.let { cameraLauncher.launch(it) }
-                } else {
-                    permissionLauncher.launch(Manifest.permission.CAMERA)
+                    if (imageUri == null) {
+                        Text("No image selected")
+                    } else {
+                        AsyncImage(
+                            model = imageUri,
+                            contentDescription = "Selected Image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 }
-            }) {
-                Icon(Icons.Default.CameraAlt, null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Camera")
             }
 
-            Button(onClick = {
-                galleryLauncher.launch("image/*")
-            }) {
-                Icon(Icons.Default.Photo, null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Gallery")
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // 🔹 Buttons
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                Button(onClick = {
+                    if (ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.CAMERA
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        val uri = createImageUri(context)
+                        tempUri = uri
+                        uri?.let { cameraLauncher.launch(it) }
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+                }) {
+                    Icon(Icons.Default.CameraAlt, null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Camera")
+                }
+
+                Button(onClick = {
+                    galleryLauncher.launch("image/*")
+                }) {
+                    Icon(Icons.Default.Photo, null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Gallery")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            // 🔹 Analyze Button
+            Button(
+                onClick = {
+                    if (imageUri != null && !viewModel.isLoading) {
+                        viewModel.analyzeImage(context, imageUri!!)
+                        onAnalyzeClick()
+                    } else {
+                        Toast.makeText(context, "Please select image first", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                },
+                enabled = !viewModel.isLoading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1565C0))
+            ) {
+                Text(
+                    if (viewModel.isLoading) "Analyzing..." else "Analyze Skin",
+                    color = Color.White
+                )
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
-
-        // 🔹 Analyze Button
-        Button(
-            onClick = {
-                imageUri?.let { onAnalyzeClick(it) }
-                    ?: Toast.makeText(context, "Please select image first", Toast.LENGTH_SHORT).show()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1565C0))
-        ) {
-            Text("Analyze Skin", color = Color.White)
-        }
     }
 }

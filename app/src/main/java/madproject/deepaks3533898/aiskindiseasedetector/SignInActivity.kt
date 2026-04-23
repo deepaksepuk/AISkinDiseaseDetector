@@ -1,5 +1,9 @@
 package madproject.deepaks3533898.aiskindiseasedetector
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,22 +25,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.google.firebase.database.FirebaseDatabase
+import kotlin.jvm.java
 
 
 @Composable
 fun SignInScreen(
-    onLoginSuccess: () -> Unit,
-    onRegisterClick: () -> Unit
+    navController: NavController
 ) {
     var useremail by remember { mutableStateOf("") }
     var userpassword by remember { mutableStateOf("") }
 
-//    val context = LocalContext.current as Activity
+    val context = LocalContext.current as Activity
 
     Column(
         modifier = Modifier
@@ -136,27 +143,25 @@ fun SignInScreen(
                     .clickable {
                         when {
                             useremail.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT).show()
                             }
 
                             userpassword.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Password", Toast.LENGTH_SHORT)
-//                                .show()
+                            Toast.makeText(context, " Please Enter Password", Toast.LENGTH_SHORT)
+                                .show()
                             }
 
                             else -> {
 
+                                val personDetails = PersonDetails(
+                                    "",
+                                    useremail,
+                                    "",
+                                    "",
+                                    password=userpassword
+                                )
 
-                                onLoginSuccess.invoke()
-//                                val personDetails = PersonDetails(
-//                                    "",
-//                                    useremail,
-//                                    "",
-//                                    "",
-//                                    userpassword
-//                                )
-//
-//                                loginUser(personDetails,context)
+                                loginUser(personDetails,context, navController)
                             }
 
                         }
@@ -189,10 +194,8 @@ fun SignInScreen(
                 color = colorResource(id = R.color.p3),
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
                 modifier = Modifier.clickable {
-                    onLoginSuccess.invoke()
+                    navController.navigate(Screen.Register.route)
 
-//                    context.startActivity(Intent(context, SignUpActivity::class.java))
-//                    context.finish()
                 }
             )
 
@@ -202,43 +205,47 @@ fun SignInScreen(
     }
 
 }
-//
-//fun loginUser(personDetails: PersonDetails, context: Context) {
-//
-//    val firebaseDatabase = FirebaseDatabase.getInstance()
-//    val databaseReference = firebaseDatabase.getReference("PersonDetails").child(personDetails.emailid.replace(".", ","))
-//
-//    databaseReference.get().addOnCompleteListener { task ->
-//        if (task.isSuccessful) {
-//            val dbData = task.result?.getValue(PersonDetails::class.java)
-//            if (dbData != null) {
-//                if (dbData.password == personDetails.password) {
-//
-//                    WorkoutTrackerData.writeLS(context, true)
-//                    WorkoutTrackerData.writeMail(context, dbData.emailid)
-//                    WorkoutTrackerData.writeUserName(context, dbData.name)
-//
-//                    Toast.makeText(context, "Login Sucessfully", Toast.LENGTH_SHORT).show()
-//
-//                    context.startActivity(Intent(context, WorkoutHomeActivity::class.java))
-//                    (context as Activity).finish()
-//
-//                } else {
-//                    Toast.makeText(context, "Seems Incorrect Credentials", Toast.LENGTH_SHORT).show()
-//                }
-//            } else {
-//                Toast.makeText(context, "Your account not found", Toast.LENGTH_SHORT).show()
-//            }
-//        } else {
-//            Toast.makeText(
-//                context,
-//                "Something went wrong",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        }
-//
-//    }
-//}
+
+fun loginUser(personDetails: PersonDetails, context: Context,navController: NavController) {
+
+    val firebaseDatabase = FirebaseDatabase.getInstance()
+    val databaseReference = firebaseDatabase.getReference("PatientAccounts").child(personDetails.emailid.replace(".", ","))
+
+    databaseReference.get().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val dbData = task.result?.getValue(PersonDetails::class.java)
+            if (dbData != null) {
+                if (dbData.password == personDetails.password) {
+
+                    PatientData.saveUserLoginStatus(context, true)
+                    PatientData.saveName(context, dbData.name)
+                    PatientData.saveEmail(context, dbData.emailid)
+
+
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+
+
+                    Toast.makeText(context, "Login Sucessfully", Toast.LENGTH_SHORT).show()
+
+
+                } else {
+                    Toast.makeText(context, "Seems Incorrect Credentials", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "Your account not found", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(
+                context,
+                "Something went wrong",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+}
 
 
 @Preview(showBackground = true)

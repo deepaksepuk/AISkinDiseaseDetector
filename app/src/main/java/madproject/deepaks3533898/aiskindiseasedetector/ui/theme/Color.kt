@@ -15,3 +15,5 @@ val LightBlue = Color(0xFF42A5F5)
 val SoftBackground = Color(0xFFF5F7FB)
 val CardWhite = Color(0xFFFFFFFF)
 val AccentGreen = Color(0xFF00C853)
+
+val FirstBG = Color(0xFFe7d7c1)

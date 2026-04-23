@@ -1,5 +1,8 @@
 package madproject.deepaks3533898.aiskindiseasedetector
 
+import android.app.Activity
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,8 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,15 +26,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.google.firebase.database.FirebaseDatabase
 
 
 @Composable
-fun SignUpScreen(onBackToLogin: () -> Unit) {
+fun SignUpScreen(navController: NavController) {
 
     var userName by remember { mutableStateOf("") }
 
@@ -42,7 +50,7 @@ fun SignUpScreen(onBackToLogin: () -> Unit) {
     var useremail by remember { mutableStateOf("") }
     var userpassword by remember { mutableStateOf("") }
 
-//    val context = LocalContext.current as Activity
+    val context = LocalContext.current as Activity
 
     Column(
         modifier = Modifier
@@ -182,23 +190,41 @@ fun SignUpScreen(onBackToLogin: () -> Unit) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
-                    .background(color = colorResource(id = R.color.white)),
-                value = userGender,
-                onValueChange = { userGender = it },
-                placeholder = { Text("Gender") },
-                leadingIcon = {
-                    Image(
-                        modifier = Modifier.size(36.dp),
-                        painter = painterResource(id = R.drawable.ic_gender),
-                        contentDescription = "userGender",
-                    )
-                },
+                    .background(color = colorResource(id = R.color.white))
+                    .padding(12.dp)
+            ) {
 
+                Text(
+                    text = "Select Gender",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colorResource(id = R.color.black)
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                    RadioButton(
+                        selected = userGender == "Male",
+                        onClick = { userGender = "Male" }
+                    )
+                    Text("Male")
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    RadioButton(
+                        selected = userGender == "Female",
+                        onClick = { userGender = "Female" }
+                    )
+                    Text("Female")
+
+
+                }
+            }
 
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -228,44 +254,44 @@ fun SignUpScreen(onBackToLogin: () -> Unit) {
                     .clickable {
                         when {
                             useremail.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, " Please Enter Mail", Toast.LENGTH_SHORT).show()
                             }
 
                             userName.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Name", Toast.LENGTH_SHORT)
-//                                .show()
+                            Toast.makeText(context, " Please Enter Name", Toast.LENGTH_SHORT)
+                                .show()
                             }
 
                             userAge.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Age", Toast.LENGTH_SHORT)
-//                                .show()
+                            Toast.makeText(context, " Please Enter Age", Toast.LENGTH_SHORT)
+                                .show()
                             }
 
                             userWeight.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Weight", Toast.LENGTH_SHORT)
-//                                .show()
+                            Toast.makeText(context, " Please Enter Weight", Toast.LENGTH_SHORT)
+                                .show()
                             }
 
                             userGender.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Gender", Toast.LENGTH_SHORT)
-//                                .show()
+                            Toast.makeText(context, " Please Enter Gender", Toast.LENGTH_SHORT)
+                                .show()
                             }
 
                             userpassword.isEmpty() -> {
-//                            Toast.makeText(context, " Please Enter Password", Toast.LENGTH_SHORT)
-//                                .show()
+                            Toast.makeText(context, " Please Enter Password", Toast.LENGTH_SHORT)
+                                .show()
                             }
 
                             else -> {
-//                                val personDetails = PersonDetails(
-//                                    userName,
-//                                    useremail,
-//                                    userAge,
-//                                    userWeight,
-//                                    userGender,
-//                                    userpassword
-//                                )
-//                                registerUser(personDetails,context);
+                                val personDetails = PersonDetails(
+                                    userName,
+                                    useremail,
+                                    userAge,
+                                    userWeight,
+                                    userGender,
+                                    userpassword
+                                )
+                                registerUser(personDetails,context,navController)
                             }
 
                         }
@@ -298,8 +324,8 @@ fun SignUpScreen(onBackToLogin: () -> Unit) {
                 color = colorResource(id = R.color.p3),
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Black),
                 modifier = Modifier.clickable {
-//                    context.startActivity(Intent(context, SignInActivity::class.java))
-//                    context.finish()
+
+                    navController.popBackStack()
                 }
             )
 
@@ -311,34 +337,35 @@ fun SignUpScreen(onBackToLogin: () -> Unit) {
 
 }
 
-//fun registerUser(personDetails: PersonDetails, context: Context) {
-//
-//    val firebaseDatabase = FirebaseDatabase.getInstance()
-//    val databaseReference = firebaseDatabase.getReference("PersonDetails")
-//
-//    databaseReference.child(personDetails.emailid.replace(".", ","))
-//        .setValue(personDetails)
-//        .addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                Toast.makeText(context, "You Registered Successfully", Toast.LENGTH_SHORT)
-//                    .show()
-//
-//            } else {
-//                Toast.makeText(
-//                    context,
-//                    "Registration Failed",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//        .addOnFailureListener { _ ->
-//            Toast.makeText(
-//                context,
-//                "Something went wrong",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        }
-//}
+fun registerUser(personDetails: PersonDetails, context: Context,navController: NavController) {
+
+    val firebaseDatabase = FirebaseDatabase.getInstance()
+    val databaseReference = firebaseDatabase.getReference("PatientAccounts")
+
+    databaseReference.child(personDetails.emailid.replace(".", ","))
+        .setValue(personDetails)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(context, "You Registered Successfully", Toast.LENGTH_SHORT)
+                    .show()
+
+                navController.popBackStack()
+            } else {
+                Toast.makeText(
+                    context,
+                    "Registration Failed",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        .addOnFailureListener { _ ->
+            Toast.makeText(
+                context,
+                "Something went wrong",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+}
 
 data class PersonDetails(
     var name: String = "",

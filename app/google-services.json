@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235335440890",
+    "project_id": "skindisease-detector",
+    "storage_bucket": "skindisease-detector.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235335440890:android:a0b4d53875520c40fb6c43",
+        "android_client_info": {
+          "package_name": "madproject.deepaks3533898.aiskindiseasedetector"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgvVbR_XpI4gudZRrUTzhno51C-QJPtrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

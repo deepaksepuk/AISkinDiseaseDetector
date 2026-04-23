@@ -26,11 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
+import madproject.deepaks3533898.aiskindiseasedetector.scanSkin.HistoryScreen
+import madproject.deepaks3533898.aiskindiseasedetector.scanSkin.ResultScreen
 import madproject.deepaks3533898.aiskindiseasedetector.scanSkin.ScanScreen
+import madproject.deepaks3533898.aiskindiseasedetector.scanSkin.ScanViewModel
 import madproject.deepaks3533898.aiskindiseasedetector.ui.theme.AISkinDiseaseDetectorTheme
 
 class MainActivity : ComponentActivity() {
@@ -52,14 +56,30 @@ fun AppNavigationMain() {
     val navController = rememberNavController()
     val context = LocalContext.current
 
+    val sharedViewModel: ScanViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
 
-        composable(Screen.ScanDisease.route) {
-            ScanScreen(onAnalyzeClick = {
 
+        composable(Screen.ScanDisease.route) {
+
+            ScanScreen(
+                onAnalyzeClick = {
+                    navController.navigate(Screen.Result.route)
+                },
+                viewModel = sharedViewModel,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(Screen.Result.route) {
+            ResultScreen(viewModel = sharedViewModel, onBackClick = {
+                navController.popBackStack()
             })
         }
 
@@ -81,23 +101,13 @@ fun AppNavigationMain() {
 
         composable(Screen.Login.route) {
             SignInScreen(
-                onLoginSuccess = {
-
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Login.route) { inclusive = true }
-                    }
-                },
-                onRegisterClick = {
-                    navController.navigate(Screen.Register.route)
-                }
+                navController
             )
         }
 
         composable(Screen.Register.route) {
             SignUpScreen(
-                onBackToLogin = {
-                    navController.popBackStack()
-                }
+                navController
             )
         }
 
@@ -105,13 +115,50 @@ fun AppNavigationMain() {
             HomeScreen(navController)
         }
 
+        composable(Screen.Profile.route)
+        {
+            ProfileScreen(navController, PatientData.getEmail(context)!!)
+        }
 
+        composable(Screen.ScanHistory.route)
+        {
+            HistoryScreen(
+                viewModel = sharedViewModel,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
 
-//        composable(Screen.CropAdvisory.route) {
-//            CropAdvisoryScreen(onBack = {
-//                navController.popBackStack()
-//            })
-//        }
+        composable(Screen.EduArticles.route)
+        {
+            EducationScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                navController,
+                sharedViewModel
+            )
+        }
+
+        composable(Screen.FullArticle.route)
+        {
+            FullArticleScreen(
+                article = sharedViewModel.selectedArticle!!,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(Screen.NearbyHospitals.route)
+        {
+            ClinicMapScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
 
 
     }
@@ -122,8 +169,15 @@ sealed class Screen(val route: String) {
     object Login : Screen("login")
     object Register : Screen("register")
     object Home : Screen("home")
+    object Profile : Screen("profile")
 
     object ScanDisease : Screen("scan_disease")
+    object Result : Screen("result")
+
+    object ScanHistory : Screen("scan_history")
+    object EduArticles : Screen("articles")
+    object FullArticle : Screen("full_article")
+    object NearbyHospitals : Screen("nearby_hospitals")
 
 }
 
@@ -140,7 +194,6 @@ fun SplashScreen(onNavigate: () -> Unit) {
 
 
 }
-
 
 
 @Composable
