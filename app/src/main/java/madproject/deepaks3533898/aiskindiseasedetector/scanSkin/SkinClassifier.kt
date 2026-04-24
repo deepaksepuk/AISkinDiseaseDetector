@@ -4,16 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
-import androidx.core.graphics.scale
 import androidx.core.graphics.get
+import androidx.core.graphics.scale
 import com.google.android.gms.tflite.java.TfLite
+import org.tensorflow.lite.InterpreterApi
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
-
-import org.tensorflow.lite.InterpreterApi
-import org.tensorflow.lite.InterpreterApi.Options
 
 class SkinClassifier(private val context: Context) {
 
