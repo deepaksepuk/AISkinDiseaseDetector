@@ -56,7 +56,6 @@ fun SignInScreen(
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.p4))
                 .padding(16.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Spacer(modifier = Modifier.height(100.dp))

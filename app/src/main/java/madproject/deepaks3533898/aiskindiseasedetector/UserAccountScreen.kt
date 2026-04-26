@@ -104,7 +104,7 @@ fun ProfileScreen(navController: NavController, userEmail: String) {
                 .background(FirstBG)
                 .padding(padding)
                 .verticalScroll(scrollState)
-                .imePadding(), // 🔥 handles keyboard
+                .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -123,7 +123,6 @@ fun ProfileScreen(navController: NavController, userEmail: String) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    // 👤 Avatar
                     Box(
                         modifier = Modifier
                             .size(80.dp)
@@ -148,7 +147,6 @@ fun ProfileScreen(navController: NavController, userEmail: String) {
                     ProfileField("Weight", userWeight, isEditing) { userWeight = it }
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Gender
                     Column(
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -162,13 +160,11 @@ fun ProfileScreen(navController: NavController, userEmail: String) {
                         ) {
                             GenderOption("Male", userGender, isEditing) { userGender = it }
                             GenderOption("Female", userGender, isEditing) { userGender = it }
-//                            GenderOption("Other", userGender, isEditing) { userGender = it }
                         }
                     }
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    // Edit / Save
                     Button(
                         onClick = {
                             if (isEditing) {
@@ -199,7 +195,6 @@ fun ProfileScreen(navController: NavController, userEmail: String) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Logout
                     OutlinedButton(
                         onClick = { showLogoutDialog = true },
                         modifier = Modifier
@@ -218,7 +213,6 @@ fun ProfileScreen(navController: NavController, userEmail: String) {
         }
     }
 
-    // Success Dialog
     if (showSuccessDialog) {
         AlertDialog(
             onDismissRequest = { showSuccessDialog = false },
@@ -232,7 +226,6 @@ fun ProfileScreen(navController: NavController, userEmail: String) {
         )
     }
 
-    // Logout Dialog
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },

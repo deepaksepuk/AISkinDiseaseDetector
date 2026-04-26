@@ -100,13 +100,6 @@ fun ScanScreen(
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var tempUri by remember { mutableStateOf<Uri?>(null) }
 
-//    LaunchedEffect(viewModel.isAnalysisComplete) {
-//        if (viewModel.isAnalysisComplete) {
-//            onAnalyzeClick()
-//        }
-//    }
-
-    // 🔥 Crop Launcher (FIXED)
     val cropLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -121,7 +114,6 @@ fun ScanScreen(
         }
     }
 
-    // 📸 Camera Launcher
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { success ->
@@ -135,7 +127,6 @@ fun ScanScreen(
         }
     }
 
-    // 🔐 Permission Launcher
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -148,7 +139,6 @@ fun ScanScreen(
         }
     }
 
-    // 🖼️ Gallery Launcher
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
@@ -184,7 +174,6 @@ fun ScanScreen(
         ) {
 
 
-            // 🔹 Image Preview
             Card(
                 shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(8.dp),
@@ -211,7 +200,6 @@ fun ScanScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 🔹 Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -246,7 +234,6 @@ fun ScanScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // 🔹 Analyze Button
             Button(
                 onClick = {
                     if (imageUri != null && !viewModel.isLoading) {

@@ -160,6 +160,11 @@ fun AppNavigationMain() {
             )
         }
 
+        composable(Screen.AboutUs.route)
+        {
+            AboutUsScreen(navController)
+        }
+
 
     }
 }
@@ -170,6 +175,7 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Home : Screen("home")
     object Profile : Screen("profile")
+    object AboutUs : Screen("about_us")
 
     object ScanDisease : Screen("scan_disease")
     object Result : Screen("result")
@@ -220,7 +226,6 @@ fun SplashScreenDesign() {
                 text = "AI Skin Disease Detector App!",
                 textAlign = TextAlign.Center,
                 color = colorResource(id = R.color.p3),
-//                color = colorResource(id = R.color.black),
                 style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -273,9 +278,3 @@ fun SplashScreenDesign() {
 
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun SplashScreenPreview() {
-//    SplashScreen()
-}

@@ -1,8 +1,6 @@
 package madproject.deepaks3533898.aiskindiseasedetector.scanSkin
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Done
@@ -28,7 +25,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -54,8 +50,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.util.CoilUtils.result
 import madproject.deepaks3533898.aiskindiseasedetector.ui.theme.FirstBG
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,8 +77,6 @@ fun ResultScreen(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    // We pass the note AND the imageUri that was analyzed
-                    // Assuming your ViewModel holds the uri used for the scan
                     viewModel.saveToDatabase(userNote)
                     showNoteDialog = false
 
@@ -106,7 +98,7 @@ fun ResultScreen(
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = null,
-                    tint = Color(0xFF4CAF50), // Premium Green color
+                    tint = Color(0xFF4CAF50),
                     modifier = Modifier.size(48.dp)
                 )
             },
@@ -118,7 +110,6 @@ fun ResultScreen(
                 TextButton(
                     onClick = {
                         showSuccessDialog = false
-                        // Optional: Reset note for next time
                         userNote = ""
                     }
                 ) {
@@ -148,11 +139,9 @@ fun ResultScreen(
             )
         },
         bottomBar = {
-            // Premium Action Button for Saving
             Button(
                 onClick = {
                     showNoteDialog = true
-                    /* We will implement database logic here next */
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -225,7 +214,6 @@ fun ResultScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // --- Detailed Information Sections ---
                 val idx = viewModel.resultIndex
                 ResultDetailSection("Symptoms", getSymptoms(idx), Icons.Default.Info)
                 ResultDetailSection("Possible Causes", getCauses(idx), Icons.Default.Warning)
@@ -236,7 +224,7 @@ fun ResultScreen(
                     Icons.Default.Favorite
                 )
 
-                Spacer(modifier = Modifier.height(100.dp)) // Space for bottom button
+                Spacer(modifier = Modifier.height(100.dp))
 
             } else {
 //                EmptyStateView()

@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Search
@@ -23,7 +22,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -31,7 +29,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -43,14 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import madproject.deepaks3533898.aiskindiseasedetector.scanSkin.ScanViewModel
 import madproject.deepaks3533898.aiskindiseasedetector.ui.theme.FirstBG
-import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +53,6 @@ fun EducationScreen(onBackClick: () -> Unit,navController: NavController,viewMod
 
     val categories = listOf("All", "Fungal", "Bacterial", "Viral", "Acne", "Allergic")
 
-    // Filter the articles based on search and category
     val filteredArticles = skinArticles.filter {
         (selectedCategory == "All" || it.type == selectedCategory) &&
                 (it.title.contains(searchQuery, ignoreCase = true) || it.content.contains(searchQuery, ignoreCase = true))
@@ -106,7 +98,6 @@ fun EducationScreen(onBackClick: () -> Unit,navController: NavController,viewMod
                 )
             )
 
-            // --- Category Filter Chips ---
             LazyRow(
                 modifier = Modifier.padding(vertical = 16.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp),
@@ -122,7 +113,6 @@ fun EducationScreen(onBackClick: () -> Unit,navController: NavController,viewMod
                 }
             }
 
-            // --- Article List ---
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
@@ -179,11 +169,6 @@ fun ArticleCard(article: SkinArticle,navController: NavController,viewModel: Sca
 
             TextButton(
                 onClick = {
-//                    val articleJson = Json.encodeToString(article)
-//                    // Encode to make it safe for a URL/Route string
-//                    val encodedJson = URLEncoder.encode(articleJson, "UTF-8")
-//                    navController.navigate("full_article/$encodedJson")
-
                     viewModel.selectedArticle = article
                     navController.navigate("full_article")
 
@@ -256,7 +241,6 @@ val skinArticles = listOf(
         symptoms = listOf("Scaly, red rash between toes", "Itching immediately after taking off shoes", "Small blisters", "Chronic dryness on the soles"),
         treatments = listOf("Antifungal sprays or powders", "Keeping feet dry and clean", "Changing socks frequently", "Wearing breathable shoes")
     ),
-    // --- New Additions (From Previous Step) ---
     SkinArticle(
         title = "Psoriasis",
         type = "Allergic",

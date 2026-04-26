@@ -33,8 +33,6 @@ class SkinClassifier(private val context: Context) {
             try {
                 val model = loadModelFile()
 
-                // 🟢 THIS IS THE FIX:
-                // Explicitly tell TFLite to use the runtime from Play Services
                 val options = InterpreterApi.Options()
                     .setRuntime(InterpreterApi.Options.TfLiteRuntime.FROM_SYSTEM_ONLY)
 
@@ -72,7 +70,6 @@ class SkinClassifier(private val context: Context) {
 
         val startTime = System.currentTimeMillis()
 
-        // 1. Log Bitmap Details
         Log.d(TAG, "Starting classification. Original Bitmap: ${bitmap.width}x${bitmap.height}")
 
         val resized = bitmap.scale(inputSize, inputSize)
@@ -81,7 +78,6 @@ class SkinClassifier(private val context: Context) {
         val byteBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * numChannels)
         byteBuffer.order(ByteOrder.nativeOrder())
 
-        // 2. Pre-processing Loop
         for (y in 0 until inputSize) {
             for (x in 0 until inputSize) {
                 val pixel = resized[x, y]
@@ -91,7 +87,6 @@ class SkinClassifier(private val context: Context) {
             }
         }
 
-        // 3. Run Inference
         val output = Array(1) { FloatArray(numClasses) }
         try {
             interpreter?.run(byteBuffer, output)
@@ -102,7 +97,6 @@ class SkinClassifier(private val context: Context) {
 
         val result = output[0]
 
-        // 4. Log Raw Model Output (See all 7 class scores)
         Log.d(TAG, "Raw Output Scores: ${result.joinToString(", ")}")
 
         val maxIndex = result.indices.maxByOrNull { result[it] } ?: 0

@@ -149,7 +149,6 @@ fun HomeScreen(
                 }
             }
 
-            // 🔹 OVERLAPPING CARD SECTION
             item {
                 Column(
                     modifier = Modifier
@@ -157,7 +156,6 @@ fun HomeScreen(
                         .padding(horizontal = 16.dp)
                 ) {
 
-                    // Quick Actions Card
                     Card(
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = CardWhite),
@@ -176,7 +174,6 @@ fun HomeScreen(
                                 color = PrimaryBlue,
                                 onClick = {
                                     navController.navigate(Screen.ScanDisease.route)
-//                                    onScanClick
                                 }
                             )
 
@@ -187,7 +184,6 @@ fun HomeScreen(
                                 onClick = {
                                     navController.navigate(Screen.ScanHistory.route)
 
-//                                    onHistoryClick
                                 }
                             )
                         }
@@ -195,10 +191,8 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    // 🔹 Health Tips Card
                     AutoSkinTipSlider()
 
-                    // 🔹 Recent Scans
                     Text(
                         "More Actions",
                         style = MaterialTheme.typography.titleMedium,
@@ -234,9 +228,12 @@ fun HomeScreen(
                         icon = Icons.Default.Info,
                         color = AccentGreen,
                         onItemClicked = {
-//                            navController.navigate(Screen.NearbyHospitals.route)
+                            navController.navigate(Screen.AboutUs.route)
                         }
                     )
+
+                    Spacer(modifier = Modifier.height(40.dp))
+
 
                 }
             }
@@ -323,7 +320,6 @@ fun PremiumRecentItem(
 fun AutoSkinTipSlider() {
     val pagerState = rememberPagerState(pageCount = { dailyTips.size })
 
-    // Auto-scroll logic
     LaunchedEffect(Unit) {
         while (true) {
             delay(5000)
@@ -349,7 +345,6 @@ fun AutoSkinTipSlider() {
                 elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 Row(modifier = Modifier.fillMaxSize()) {
-                    // Text Section
                     Column(
                         modifier = Modifier
                             .weight(1.2f)
@@ -372,7 +367,6 @@ fun AutoSkinTipSlider() {
                         )
                     }
 
-                    // Image Section
                     AsyncImage(
                         model = tip.imageUrl,
                         contentDescription = null,
@@ -386,7 +380,6 @@ fun AutoSkinTipSlider() {
             }
         }
 
-        // Pager Indicator (The Dots)
         Row(
             Modifier
                 .height(24.dp)

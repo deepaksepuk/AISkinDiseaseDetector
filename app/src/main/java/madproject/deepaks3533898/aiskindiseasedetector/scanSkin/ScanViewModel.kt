@@ -22,14 +22,13 @@ class ScanViewModel(application: Application) : AndroidViewModel(application) {
     var isLoading by mutableStateOf(false)
     var resultLabel by mutableStateOf("")
     var resultConfidence by mutableFloatStateOf(0f)
-    var resultIndex by mutableStateOf(-1) // Add this to track which disease was found
+    var resultIndex by mutableStateOf(-1)
 
-    var isAnalysisComplete by mutableStateOf(false) // Add this flag
+    var isAnalysisComplete by mutableStateOf(false)
 
-    // Status message for the UI if initialization is slow
     var statusMessage by mutableStateOf("")
 
-    var currentImageUri by mutableStateOf<Uri?>(null) // State to hold the URI
+    var currentImageUri by mutableStateOf<Uri?>(null)
 
     private val classifier = SkinClassifier(application)
 
@@ -55,7 +54,6 @@ class ScanViewModel(application: Application) : AndroidViewModel(application) {
                 resultIndex = classifier.labels.indexOf(classification.first)
                 isAnalysisComplete = true
             } else {
-                // This happens if TfLite.initialize hasn't finished yet
                 statusMessage = "TFLite is still initializing. Please try again in a moment."
             }
 
@@ -72,7 +70,6 @@ class ScanViewModel(application: Application) : AndroidViewModel(application) {
         classifier.close()
     }
 
-    // Inside ScanViewModel
 
     private val db by lazy {
         Room.databaseBuilder(
@@ -88,7 +85,6 @@ class ScanViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun saveToDatabase(note: String) {
-        // Only save if we actually have a result
         if (resultIndex == -1) return
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -97,13 +93,11 @@ class ScanViewModel(application: Application) : AndroidViewModel(application) {
                 confidence = resultConfidence,
                 date = System.currentTimeMillis(),
                 note = note,
-                // Convert URI to string to store in Room
                 imagePath = currentImageUri?.toString() ?: ""
             )
 
             dao.insertScan(record)
 
-            // Optional: Log it to confirm
             Log.d("Database", "Saved record for: ${record.diseaseName}")
         }
     }

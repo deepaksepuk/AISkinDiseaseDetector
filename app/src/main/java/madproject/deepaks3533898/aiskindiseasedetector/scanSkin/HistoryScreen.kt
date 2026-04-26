@@ -93,10 +93,8 @@ fun HistoryItem(
     record: ScanRecord,
     onDelete: () -> Unit
 ) {
-    // 1. Create a confirmation state
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    // 2. Format the Date (Long to String)
     val formattedDate = remember(record.date) {
         val sdf = SimpleDateFormat("MMM dd, yyyy • hh:mm a", Locale.getDefault())
         sdf.format(Date(record.date))
@@ -130,7 +128,6 @@ fun HistoryItem(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // --- Image Thumbnail ---
             AsyncImage(
                 model = record.imagePath,
                 contentDescription = "Skin Scan",
@@ -138,13 +135,11 @@ fun HistoryItem(
                     .size(80.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop,
-                // Placeholder in case image is loading or missing
                 error = painterResource(android.R.drawable.ic_menu_report_image)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // --- Details Column ---
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = record.diseaseName,
@@ -182,7 +177,6 @@ fun HistoryItem(
                 }
             }
 
-            // --- Delete Button ---
             IconButton(onClick = { showDeleteDialog = true }) {
                 Icon(
                     imageVector = Icons.Default.Delete,

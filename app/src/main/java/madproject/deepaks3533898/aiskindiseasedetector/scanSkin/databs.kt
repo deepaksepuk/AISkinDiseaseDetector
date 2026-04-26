@@ -10,7 +10,6 @@ import androidx.room.Query
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.flow.Flow
 
-// ScanEntity.kt
 @Entity(tableName = "scan_history")
 data class ScanRecord(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -18,10 +17,9 @@ data class ScanRecord(
     val confidence: Float,
     val date: Long,
     val note: String,
-    val imagePath: String // We save the file path, not the whole image
+    val imagePath: String
 )
 
-// ScanDao.kt
 @Dao
 interface ScanDao {
     @Query("SELECT * FROM scan_history ORDER BY date DESC")

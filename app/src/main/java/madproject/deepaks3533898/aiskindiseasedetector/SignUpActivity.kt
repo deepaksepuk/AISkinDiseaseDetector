@@ -63,7 +63,6 @@ fun SignUpScreen(navController: NavController) {
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.p4))
                 .padding(16.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -375,9 +374,3 @@ data class PersonDetails(
     var gender: String = "",
     var password: String = ""
 )
-
-@Preview(showBackground = true)
-@Composable
-fun RegistrationScreenPreview() {
-//    RegistrationScreen()
-}

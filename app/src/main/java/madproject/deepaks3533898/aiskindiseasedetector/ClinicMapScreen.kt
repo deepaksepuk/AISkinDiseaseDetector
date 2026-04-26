@@ -38,7 +38,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import madproject.deepaks3533898.aiskindiseasedetector.ui.theme.FirstBG
 
-// Data Model for Clinics
 data class Clinic(
     val name: String,
     val address: String,
@@ -60,7 +59,6 @@ fun ClinicMapScreen(onBackClick: () -> Unit) {
         position = CameraPosition.fromLatLngZoom(teessideLocation, 14f)
     }
 
-    // --- State Management ---
     var selectedClinic by remember { mutableStateOf<Clinic?>(null) }
     val sheetState = rememberModalBottomSheetState()
     var showSheet by remember { mutableStateOf(false) }
@@ -71,7 +69,6 @@ fun ClinicMapScreen(onBackClick: () -> Unit) {
         )
     }
 
-    // --- Permission & GPS Logic ---
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -117,7 +114,6 @@ fun ClinicMapScreen(onBackClick: () -> Unit) {
                 ),
                 onMapClick = { showSheet = false }
             ) {
-                // Populate the 20 Real Clinics
                 getMockClinics(teessideLocation).forEach { clinic ->
                     Marker(
                         state = MarkerState(position = clinic.latLng),
@@ -146,10 +142,6 @@ fun ClinicMapScreen(onBackClick: () -> Unit) {
     }
 }
 
-/**
- * Checks if System GPS is ON. If OFF, shows the Google Play Services
- * "Turn on Location" dialog.
- */
 private fun checkAndEnableGPS(context: Context) {
     val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).build()
     val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
@@ -160,7 +152,6 @@ private fun checkAndEnableGPS(context: Context) {
     task.addOnFailureListener { exception ->
         if (exception is ResolvableApiException) {
             try {
-                // This launches the system dialog to turn on GPS
                 val activity = context as? androidx.activity.ComponentActivity
                 exception.startResolutionForResult(activity!!, 1001)
             } catch (sendEx: Exception) {
@@ -268,7 +259,7 @@ fun ClinicDetailContent(clinic: Clinic, context: Context) {
         }
     }
 }
-// Helper to generate 20 locations around Middlesbrough
+
 fun getMockClinics(center: LatLng): List<Clinic> {
     return listOf(
         Clinic(
