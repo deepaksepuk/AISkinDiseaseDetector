@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AISkinDiseaseDetectorTheme {
-                AppNavigationMain()
+                NavigationGraph()
             }
         }
     }
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun AppNavigationMain() {
+fun NavigationGraph() {
 
     val navController = rememberNavController()
     val context = LocalContext.current
